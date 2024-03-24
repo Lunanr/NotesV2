@@ -12,7 +12,6 @@ function NoteApp() {
     return (
         <div className="app-container">
             <header>
-                <HomeNavigation />
                 <Navigation />
             </header>
             <main>
