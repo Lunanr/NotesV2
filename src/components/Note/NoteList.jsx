@@ -22,7 +22,7 @@ function NoteList({ notes }) {
     );
 }
 
-NoteList.proptTypes = {
+NoteList.propTypes = {
     notes: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 

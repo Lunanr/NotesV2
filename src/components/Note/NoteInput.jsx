@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { IoCheckmark } from "react-icons/io5";
 
 class NoteInput extends React.Component {
@@ -56,7 +57,11 @@ class NoteInput extends React.Component {
                 </div>
             </>
         );
-    }
+    };
 }
+
+NoteInput.propTypes = {
+    addNote: PropTypes.func.isRequired
+};
 
 export default NoteInput;
