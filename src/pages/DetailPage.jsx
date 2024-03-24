@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { getNote } from "../utils/local-data";
+import PropTypes from "prop-types";
 import NoteDetail from "../components/Note/NoteDetail";
 
 function DetailPageWrapper() {
@@ -26,6 +27,10 @@ class DetailPage extends React.Component {
             <NoteDetail {...this.state.note} />
         )
     }
+}
+
+DetailPage.propTypes = {
+    id: PropTypes.string.isRequired
 }
 
 export default DetailPageWrapper;

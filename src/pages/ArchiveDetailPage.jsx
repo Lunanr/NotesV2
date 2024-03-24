@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { getNote } from "../utils/local-data";
+import PropTypes from "prop-types";
 import ArchiveNoteDetail from "../components/ArchiveNote/ArchiveNoteDetail";
 
 function ArchiveDetailPageWrapper() {
@@ -26,6 +27,10 @@ class ArchiveDetailPage extends React.Component {
             <ArchiveNoteDetail {...this.state.note} />
         )
     }
+}
+
+ArchiveDetailPage.propTypes = {
+    id: PropTypes.string.isRequired
 }
 
 export default ArchiveDetailPageWrapper;

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
 import NoteList from "../components/Note/NoteList";
 import SearchBar from "../components/SearchBar";
@@ -30,7 +31,7 @@ class HomePage extends React.Component {
 
     onKeywordChangeHandler = (keyword) => {
         this.setState({ keyword });
-        this.props.keywordCahnge(keyword)
+        this.props.keywordChange(keyword)
     };
 
     render() {
@@ -56,7 +57,12 @@ class HomePage extends React.Component {
                 </div>
             </section>
         )
-    }
+    };
+}
+
+HomePage.propTypes = {
+    defaultKeyword: PropTypes.string,
+    keywordChange: PropTypes.func.isRequired,
 }
 
 export default HomePageWrapper;

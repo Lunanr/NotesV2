@@ -44,7 +44,7 @@ function DetailNoteButton({ id }) {
     );
 }
 
-DetailNoteButtonWrapper.propTypes = {
+DetailNoteButton.propTypes = {
     id: PropTypes.string.isRequired
 }
 

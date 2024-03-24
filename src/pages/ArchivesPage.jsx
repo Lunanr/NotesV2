@@ -2,6 +2,7 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import ArchiveNoteList from "../components/ArchiveNote/ArchiveNotesList";
 import SearchBar from "../components/SearchBar";
+import PropTypes from "prop-types";
 import { getArchivedNotes } from "../utils/local-data";
 
 function ArchivePageWrapper() {
@@ -13,7 +14,7 @@ function ArchivePageWrapper() {
         setSearchParams({ keyword });
     }
 
-    return <ArchivesPage defaultKeyword={keyword} keywordCahnge={changeSearchParams} />
+    return <ArchivesPage defaultKeyword={keyword} keywordChange={changeSearchParams} />
 }
 
 class ArchivesPage extends React.Component {
@@ -28,7 +29,7 @@ class ArchivesPage extends React.Component {
 
     onKeywordChangeHandler = (keyword) => {
         this.setState({ keyword });
-        this.props.keywordCahnge(keyword)
+        this.props.keywordChange(keyword)
     };
 
     render() {
@@ -48,6 +49,11 @@ class ArchivesPage extends React.Component {
             </section>
         )
     }
+}
+
+ArchivesPage.propTypes = {
+    defaultKeyword: PropTypes.string,
+    keywordChange: PropTypes.func.isRequired,
 }
 
 export default ArchivePageWrapper;

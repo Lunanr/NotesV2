@@ -44,7 +44,7 @@ function ArchiveDetailNoteButton({ id }) {
     );
 }
 
-ArchiveDetailNoteButtonWrapper.propTypes = {
+ArchiveDetailNoteButton.propTypes = {
     id: PropTypes.string.isRequired
 }
 
