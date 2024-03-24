@@ -1,6 +1,6 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import ArchiveNoteList from "../components/Archive/ArchiveNotesList";
+import ArchiveNoteList from "../components/ArchiveNote/ArchiveNotesList";
 import SearchBar from "../components/SearchBar";
 import { getArchivedNotes } from "../utils/local-data";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { getNote } from "../utils/local-data";
-import ArchiveNoteDetail from "../components/Archive/ArchiveNoteDetail";
+import ArchiveNoteDetail from "../components/ArchiveNote/ArchiveNoteDetail";
 
 function ArchiveDetailPageWrapper() {
     const { id } = useParams();
