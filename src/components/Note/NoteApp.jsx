@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
-import HomeNavigation from "../Navigation/HomeNavigation";
 import HomePageWrapper from "../../pages/HomePage";
 import ArchivePageWrapper from "../../pages/ArchivesPage";
 import DetailPageWrapper from "../../pages/DetailPage"
