@@ -4,7 +4,6 @@ import Navigation from "../Navigation/Navigation";
 import HomePageWrapper from "../../pages/HomePage";
 import ArchivePageWrapper from "../../pages/ArchivesPage";
 import DetailPageWrapper from "../../pages/DetailPage"
-import ArchiveDetailPageWrapper from "../../pages/ArchiveDetailPage";
 import AddPage from "../../pages/AddPage";
 
 function NoteApp() {
@@ -18,7 +17,6 @@ function NoteApp() {
                     <Route path="/" element={<HomePageWrapper />} />
                     <Route path="/archives" element={<ArchivePageWrapper />} />
                     <Route path="/notes/:id" element={<DetailPageWrapper />} />
-                    <Route path="/archives/:id" element={<ArchiveDetailPageWrapper />} />
                     <Route path="/add" element={<AddPage />} />
                 </Routes>
             </main>

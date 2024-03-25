@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getNote } from "../utils/local-data";
 import PropTypes from "prop-types";
 import NoteDetail from "../components/Note/NoteDetail";
+import NotFoundPage from "./NotFoundPage";
 
 function DetailPageWrapper() {
     const { id } = useParams();
@@ -19,8 +20,9 @@ class DetailPage extends React.Component {
     };
 
     render() {
-        if (this.state.movie === null) {
-            return <p>Notes is not found!</p>
+        const { note } = this.state;
+        if (!note) {
+            return <NotFoundPage />;
         }
 
         return (

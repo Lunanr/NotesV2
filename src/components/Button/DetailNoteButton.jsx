@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom"
-import { archiveNote, deleteNote } from "../../utils/local-data";
+import { archiveNote, deleteNote, unarchiveNote, getNote } from "../../utils/local-data";
 import { PiArchiveBoxDuotone } from "react-icons/pi";
+import { RiInboxUnarchiveLine } from "react-icons/ri"
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
@@ -13,10 +14,16 @@ function DetailNoteButtonWrapper() {
 
 function DetailNoteButton({ id }) {
     const navigate = useNavigate();
+    const note = getNote(id);
 
     const onArchiveChangeEventHandler = () => {
-        archiveNote(id);
-        navigate("/");
+        if (note.archived) {
+            unarchiveNote(id);
+            navigate("/archives");
+        } else {
+            archiveNote(id);
+            navigate("/");
+        }
     };
 
     const onDeleteChangeEventHandler = () => {
@@ -26,13 +33,23 @@ function DetailNoteButton({ id }) {
 
     return (
         <div className="detail-page__action">
-            <button
-                className="action"
-                type="button"
-                title="Arsipkan"
-                onClick={onArchiveChangeEventHandler}>
-                <PiArchiveBoxDuotone />
-            </button>
+            {note.archived
+                ? (<button
+                    className="action"
+                    type="button"
+                    title="aktifkan"
+                    onClick={onArchiveChangeEventHandler}>
+                    <PiArchiveBoxDuotone />
+                </button>
+                ) : (
+                    <button
+                        className="action"
+                        type="button"
+                        title="arsipkan"
+                        onClick={onArchiveChangeEventHandler}>
+                        <RiInboxUnarchiveLine />
+                    </button>)
+            }
             <button
                 className="action"
                 type="button"

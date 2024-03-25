@@ -1,6 +1,6 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import ArchiveNoteList from "../components/ArchiveNote/ArchiveNotesList";
+import NoteList from "../components/Note/NoteList";
 import SearchBar from "../components/SearchBar";
 import PropTypes from "prop-types";
 import { getArchivedNotes } from "../utils/local-data";
@@ -45,7 +45,7 @@ class ArchivesPage extends React.Component {
                 <section className="search-bar">
                     <SearchBar keyword={this.state.keyword} keywordChange={this.onKeywordChangeHandler} />
                 </section>
-                <ArchiveNoteList notes={notes} />
+                <NoteList notes={notes} />
             </section>
         )
     }

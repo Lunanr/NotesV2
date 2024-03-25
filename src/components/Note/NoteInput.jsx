@@ -20,7 +20,7 @@ class NoteInput extends React.Component {
 
     onBodyChangeEventHandler = (event) => {
         this.setState(() => ({
-            body: event.target.value,
+            body: event.target.innerText,
         }));
     };
 
@@ -39,12 +39,13 @@ class NoteInput extends React.Component {
                         placeholder="Catatan Rahasia"
                         value={this.state.title}
                         onChange={this.onTitleChangeEventHandler} />
-                    <input
+                    <div
                         className="add-new-page__input__body"
-                        type="text"
-                        placeholder="Sebenarya saya adalah..."
+                        contentEditable="true"
+                        data-placeholder="Sebenarya saya adalah..."
                         value={this.state.body}
-                        onChange={this.onBodyChangeEventHandler} />
+                        onInput={this.onBodyChangeEventHandler} >
+                    </div>
                 </div>
                 <div className="add-new-page__action">
                     <button
