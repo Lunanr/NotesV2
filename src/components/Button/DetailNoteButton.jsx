@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom"
-import { archiveNote, deleteNote, unarchiveNote, getNote } from "../../utils/local-data";
+import { archiveNote, deleteNote, unarchiveNote, getNote } from "../../utils/network-data";
 import { PiArchiveBoxDuotone } from "react-icons/pi";
 import { RiInboxUnarchiveLine } from "react-icons/ri"
 import { BsFillTrash3Fill } from "react-icons/bs";
@@ -14,31 +14,44 @@ function DetailNoteButtonWrapper() {
 
 function DetailNoteButton({ id }) {
     const navigate = useNavigate();
-    const note = getNote(id);
+    const [notes, setNotes] = React.useState([]);
 
-    const onArchiveChangeEventHandler = () => {
-        if (note.archived) {
-            unarchiveNote(id);
-            navigate("/archives");
-        } else {
-            archiveNote(id);
+    React.useEffect(() => {
+        getNote(id).then(({ data }) => {
+            setNotes(data)
+        });
+    }, []);
+
+    async function onArchiveEventHander(id) {
+        if (notes.archived) {
+            await unarchiveNote(id);
             navigate("/");
         }
-    };
+        else {
+            await archiveNote(id);
+            navigate("/archives");
+        }
+    }
 
-    const onDeleteChangeEventHandler = () => {
-        deleteNote(id);
-        navigate("/");
-    };
+    async function onDeleteHander(id) {
+        if (notes.archived) {
+            await deleteNote(id);
+            navigate("/archives")
+        }
+        else {
+            await deleteNote(id);
+            navigate("/");
+        }
+    }
 
     return (
         <div className="detail-page__action">
-            {note.archived
+            {notes.archived
                 ? (<button
                     className="action"
                     type="button"
                     title="aktifkan"
-                    onClick={onArchiveChangeEventHandler}>
+                    onClick={() => onArchiveEventHander(id)}>
                     <PiArchiveBoxDuotone />
                 </button>
                 ) : (
@@ -46,7 +59,7 @@ function DetailNoteButton({ id }) {
                         className="action"
                         type="button"
                         title="arsipkan"
-                        onClick={onArchiveChangeEventHandler}>
+                        onClick={() => onArchiveEventHander(id)}>
                         <RiInboxUnarchiveLine />
                     </button>)
             }
@@ -54,7 +67,7 @@ function DetailNoteButton({ id }) {
                 className="action"
                 type="button"
                 title="Hapus"
-                onClick={onDeleteChangeEventHandler}>
+                onClick={() => onDeleteHander(id)}>
                 <BsFillTrash3Fill />
             </button>
         </div>

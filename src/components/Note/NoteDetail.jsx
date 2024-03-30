@@ -3,21 +3,24 @@ import DetailNoteButton from "../Button/DetailNoteButton";
 import PropTypes from "prop-types";
 import { showFormattedDate } from "../../utils";
 
-function NoteDetail({ title, createdAt, body }) {
+function NoteDetail({ note }) {
     return (
         <section className="detail-page">
-            <h3 className="detail-page__title">{title}</h3>
-            <p className="detail-page__createdAt">{showFormattedDate(createdAt)}</p>
-            <div className="detail-page__body">{body}</div>
+            <h3 className="detail-page__title">{note.title}</h3>
+            <p className="detail-page__createdAt">{showFormattedDate(note.createdAt)}</p>
+            <div className="detail-page__body">{note.body}</div>
             <DetailNoteButton />
         </section>
     )
 }
 
-NoteDetail.propTypes = {
-    title: PropTypes.string.isRequired,
-    createdAt: PropTypes.string.isRequired,
-    body: PropTypes.string.isRequired
-}
+// NoteDetail.propTypes = {
+//     note: PropTypes.shape({
+//         title: PropTypes.string.isRequired,
+//         createdAt: PropTypes.string.isRequired,
+//         body: PropTypes.string.isRequired
+//     }).isRequired
+// };
+// Note.title undifined
 
 export default NoteDetail;

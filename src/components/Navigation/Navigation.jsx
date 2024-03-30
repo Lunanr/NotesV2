@@ -1,16 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import { LocaleConsumer } from "../Contexts/LocaleContext";
 
 function Navigation() {
     return (
-        <>
-            <h1><Link to="/">Aplikasi Catatan</Link></h1>
-            <nav className="navigation">
-                <ul>
-                    <li><Link to="/archives">Arsip</Link></li>
-                </ul>
-            </nav>
-        </>
+        <LocaleConsumer>
+            {({ locale }) => {
+                return (
+                    <nav className="navigation">
+                        <ul>
+                            <li><Link to="/archives">{locale === "id" ? "Terarsip" : "Archived"}</Link></li>
+                        </ul>
+                    </nav>
+                )
+            }}
+        </LocaleConsumer>
     );
 }
 

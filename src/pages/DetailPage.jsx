@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { getNote } from "../utils/local-data";
+import { getNote } from "../utils/network-data";
 import PropTypes from "prop-types";
 import NoteDetail from "../components/Note/NoteDetail";
 import NotFoundPage from "./NotFoundPage";
@@ -15,18 +15,28 @@ class DetailPage extends React.Component {
         super(props);
 
         this.state = {
-            note: getNote(props.id)
+            notes: {}
         }
     };
 
+    async componentDidMount() {
+        const { id } = this.props;
+        const { data } = await getNote(id);
+
+        this.setState(() => {
+            return {
+                notes: data
+            }
+        })
+    }
+
     render() {
-        const { note } = this.state;
-        if (!note) {
+        if (!this.state.notes) {
             return <NotFoundPage />;
         }
 
         return (
-            <NoteDetail {...this.state.note} />
+            <NoteDetail note={this.state.notes} />
         )
     }
 }

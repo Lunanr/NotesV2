@@ -3,7 +3,8 @@ import { useSearchParams } from "react-router-dom";
 import NoteList from "../components/Note/NoteList";
 import SearchBar from "../components/SearchBar";
 import PropTypes from "prop-types";
-import { getArchivedNotes } from "../utils/local-data";
+import { getArchivedNotes } from "../utils/network-data";
+import { LocaleConsumer } from "../components/Contexts/LocaleContext";
 
 function ArchivePageWrapper() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -22,10 +23,20 @@ class ArchivesPage extends React.Component {
         super(props);
 
         this.state = {
-            notes: getArchivedNotes(),
+            notes: [],
             keyword: props.defaultKeyword || ""
         }
     };
+
+    async componentDidMount() {
+        const { data } = await getArchivedNotes();
+
+        this.setState(() => {
+            return {
+                notes: data
+            }
+        })
+    }
 
     onKeywordChangeHandler = (keyword) => {
         this.setState({ keyword });
@@ -40,13 +51,19 @@ class ArchivesPage extends React.Component {
         });
 
         return (
-            <section className="archives-page">
-                <h2>Catatan Arsip</h2>
-                <section className="search-bar">
-                    <SearchBar keyword={this.state.keyword} keywordChange={this.onKeywordChangeHandler} />
-                </section>
-                <NoteList notes={notes} />
-            </section>
+            <LocaleConsumer>
+                {({ locale }) => {
+                    return (
+                        <section className="archives-page">
+                            <h2>{locale === "id" ? "Catatan Arsip" : "Archive Note"}</h2>
+                            <section className="search-bar">
+                                <SearchBar keyword={this.state.keyword} keywordChange={this.onKeywordChangeHandler} />
+                            </section>
+                            <NoteList notes={notes} />
+                        </section>
+                    )
+                }}
+            </LocaleConsumer>
         )
     }
 }
