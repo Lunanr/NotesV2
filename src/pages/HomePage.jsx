@@ -13,10 +13,12 @@ function HomePage() {
     const [keyword, setKeyword] = React.useState(() => {
         return searchParams.get("keyword") || ""
     });
+    const [loading, setLoading] = React.useState(true);
     const { locale } = React.useContext(LocaleContext);
 
     React.useEffect(() => {
         getActiveNotes().then(({ data }) => {
+            setLoading(false);
             setNotes(data);
         });
     }, []);
@@ -38,7 +40,11 @@ function HomePage() {
             <section className="search-bar">
                 <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
             </section>
-            <NoteList notes={filteredNotes} />
+            {loading ? (
+                <p>{locale === "id" ? "Memuat Catatan..." : "Loading Notes..."}</p>
+            ) : (
+                <NoteList notes={filteredNotes} />
+            )}
             <div className="homepage__action">
                 <Link to="/add" className="action-link">
                     <button className="action" type="button" title="Tambah">

@@ -19,7 +19,7 @@ function DetailPage() {
     }
 
     return (
-        <NoteDetail title={notes.title} createdAt={notes.createdAt} body={notes.body} />
+        <NoteDetail id={notes.id} title={notes.title} createdAt={notes.createdAt} body={notes.body} />
     )
 }
 

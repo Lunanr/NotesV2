@@ -1,14 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useParams } from "react-router-dom"
 import { archiveNote, deleteNote, unarchiveNote, getNote } from "../../utils/network-data";
 import { PiArchiveBoxDuotone } from "react-icons/pi";
 import { RiInboxUnarchiveLine } from "react-icons/ri"
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
-function DetailNoteButton() {
-    const { id } = useParams();
+function DetailNoteButton({ id }) {
     const navigate = useNavigate();
     const [notes, setNotes] = React.useState([]);
 
@@ -68,6 +66,10 @@ function DetailNoteButton() {
             </button>
         </div>
     );
+}
+
+DetailNoteButton.propTypes = {
+    id: PropTypes.string
 }
 
 export default DetailNoteButton;
