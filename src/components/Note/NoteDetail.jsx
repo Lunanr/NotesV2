@@ -16,8 +16,8 @@ function NoteDetail({ title, createdAt, body }) {
 
 NoteDetail.propTypes = {
     title: PropTypes.string,
-    createdAt: PropTypes.string.isRequired,
-    body: PropTypes.string.isRequired
+    createdAt: PropTypes.string,
+    body: PropTypes.string
 };
 
 export default NoteDetail;

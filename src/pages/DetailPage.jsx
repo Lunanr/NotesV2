@@ -14,8 +14,6 @@ function DetailPage() {
         });
     }, []);
 
-    console.log(notes);
-
     if (!notes) {
         return <NotFoundPage />;
     }
