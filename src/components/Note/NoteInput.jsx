@@ -2,67 +2,62 @@ import React from "react";
 import PropTypes from "prop-types";
 import { IoCheckmark } from "react-icons/io5";
 
-class NoteInput extends React.Component {
-    constructor(props) {
-        super(props);
+function NoteInput({ addNote }) {
+    const [title, setTitle] = React.useState("");
+    const [body, setBody] = React.useState("");
 
-        this.state = {
-            title: "",
-            body: "",
-        };
-    }
-
-    onTitleChangeEventHandler = (event) => {
-        this.setState(() => ({
-            title: event.target.value,
-        }));
+    const onTitleChangeHandler = (event) => {
+        setTitle(event.target.value);
     };
 
-    onBodyChangeEventHandler = (event) => {
-        this.setState(() => ({
-            body: event.target.innerText,
-        }));
+    const onBodyChangeHandler = (event) => {
+        setBody(event.target.innerText);
     };
 
-    onSubmitEventHandler = (event) => {
+    const onSubmitEventHandler = (event) => {
         event.preventDefault();
-        this.props.addNote(this.state)
+
+        addNote({
+            title: title,
+            body: body,
+        });
+
+        setTitle("");
+        setBody("");
     };
 
-    render() {
-        return (
-            <>
-                <div className="add-new-page__input">
-                    <input
-                        className="add-new-page__input__title"
-                        type="text"
-                        placeholder="Catatan Rahasia"
-                        value={this.state.title}
-                        onChange={this.onTitleChangeEventHandler} />
-                    <div
-                        className="add-new-page__input__body"
-                        contentEditable="true"
-                        data-placeholder="Sebenarya saya adalah..."
-                        value={this.state.body}
-                        onInput={this.onBodyChangeEventHandler} >
-                    </div>
+    return (
+        <>
+            <div className="add-new-page__input">
+                <input
+                    className="add-new-page__input__title"
+                    type="text"
+                    placeholder="Catatan Rahasia"
+                    value={title}
+                    onChange={onTitleChangeHandler} />
+                <div
+                    className="add-new-page__input__body"
+                    contentEditable="true"
+                    data-placeholder="Sebenarya saya adalah..."
+                    value={body}
+                    onInput={onBodyChangeHandler} >
                 </div>
-                <div className="add-new-page__action">
-                    <button
-                        className="action"
-                        type="submit"
-                        title="simpan"
-                        onClick={this.onSubmitEventHandler}>
-                        <IoCheckmark />
-                    </button>
-                </div>
-            </>
-        );
-    };
+            </div>
+            <div className="add-new-page__action">
+                <button
+                    className="action"
+                    type="submit"
+                    title="simpan"
+                    onClick={onSubmitEventHandler}>
+                    <IoCheckmark />
+                </button>
+            </div>
+        </>
+    )
 }
 
 NoteInput.propTypes = {
-    addNote: PropTypes.func.isRequired
-};
+    addNote: PropTypes.func.isRequired,
+}
 
 export default NoteInput;

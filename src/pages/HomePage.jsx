@@ -1,85 +1,53 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
 import NoteList from "../components/Note/NoteList";
 import SearchBar from "../components/SearchBar";
 import { Link } from "react-router-dom";
 import { getActiveNotes } from "../utils/network-data";
 import { FaPlus } from "react-icons/fa6";
-import { LocaleConsumer } from "../components/Contexts/LocaleContext";
+import LocaleContext from "../components/Contexts/LocaleContext";
 
-function HomePageWrapper() {
+function HomePage() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const [notes, setNotes] = React.useState([]);
+    const [keyword, setKeyword] = React.useState(() => {
+        return searchParams.get("keyword") || ""
+    });
+    const { locale } = React.useContext(LocaleContext);
 
-    const keyword = searchParams.get("keyword");
-
-    function changeSearchParams(keyword) {
-        setSearchParams({ keyword });
-    }
-
-    return <HomePage defaultKeyword={keyword} keywordChange={changeSearchParams} />
-}
-
-class HomePage extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            notes: [],
-            keyword: props.defaultKeyword || "",
-        }
-    };
-
-    async componentDidMount() {
-        const { data } = await getActiveNotes();
-
-        this.setState(() => {
-            return {
-                notes: data
-            }
-        })
-    }
-
-    onKeywordChangeHandler = (keyword) => {
-        this.setState({ keyword });
-        this.props.keywordChange(keyword)
-    };
-
-    render() {
-        const notes = this.state.notes.filter((note) => {
-            return note.title.toLowerCase().includes(
-                this.state.keyword.toLowerCase()
-            );
+    React.useEffect(() => {
+        getActiveNotes().then(({ data }) => {
+            setNotes(data);
         });
+    }, []);
 
-        return (
-            <LocaleConsumer>
-                {({ locale }) => {
-                    return (
-                        <section className="homepage">
-                            <h2>{locale === "id" ? "Catatan Aktif" : "Active Note"}</h2>
-                            <section className="search-bar">
-                                <SearchBar keyword={this.state.keyword} keywordChange={this.onKeywordChangeHandler} />
-                            </section>
-                            <NoteList notes={notes} />
-                            <div className="homepage__action">
-                                <Link to="/add" className="action-link">
-                                    <button className="action" type="button" title="Tambah">
-                                        <FaPlus />
-                                    </button>
-                                </Link>
-                            </div>
-                        </section>
-                    )
-                }}
-            </LocaleConsumer>
-        )
+    function onKeywordChangeHandler(keyword) {
+        setKeyword(keyword);
+        setSearchParams({ keyword });
     };
+
+    const filteredNotes = notes.filter((note) => {
+        return note.title.toLowerCase().includes(
+            keyword.toLocaleLowerCase()
+        );
+    });
+
+    return (
+        <section className="homepage">
+            <h2>{locale === "id" ? "Catatan Aktif" : "Active Note"}</h2>
+            <section className="search-bar">
+                <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
+            </section>
+            <NoteList notes={filteredNotes} />
+            <div className="homepage__action">
+                <Link to="/add" className="action-link">
+                    <button className="action" type="button" title="Tambah">
+                        <FaPlus />
+                    </button>
+                </Link>
+            </div>
+        </section>
+    )
 }
 
-HomePage.propTypes = {
-    defaultKeyword: PropTypes.string,
-    keywordChange: PropTypes.func.isRequired,
-}
-
-export default HomePageWrapper;
+export default HomePage;

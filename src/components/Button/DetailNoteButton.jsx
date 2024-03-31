@@ -7,12 +7,8 @@ import { RiInboxUnarchiveLine } from "react-icons/ri"
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
-function DetailNoteButtonWrapper() {
+function DetailNoteButton() {
     const { id } = useParams();
-    return <DetailNoteButton id={id} />
-}
-
-function DetailNoteButton({ id }) {
     const navigate = useNavigate();
     const [notes, setNotes] = React.useState([]);
 
@@ -74,8 +70,4 @@ function DetailNoteButton({ id }) {
     );
 }
 
-DetailNoteButton.propTypes = {
-    id: PropTypes.string.isRequired
-}
-
-export default DetailNoteButtonWrapper;
+export default DetailNoteButton;

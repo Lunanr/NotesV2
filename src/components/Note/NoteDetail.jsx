@@ -14,13 +14,14 @@ function NoteDetail({ note }) {
     )
 }
 
+// const notePropTypes = PropTypes.shape({
+//     title: PropTypes.string.isRequired,
+//     createdAt: PropTypes.string.isRequired,
+//     body: PropTypes.string.isRequired
+// })
+
 // NoteDetail.propTypes = {
-//     note: PropTypes.shape({
-//         title: PropTypes.string.isRequired,
-//         createdAt: PropTypes.string.isRequired,
-//         body: PropTypes.string.isRequired
-//     }).isRequired
+//     note: PropTypes.arrayOf(notePropTypes).isRequired
 // };
-// Note.title undifined
 
 export default NoteDetail;

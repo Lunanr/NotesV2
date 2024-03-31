@@ -5,12 +5,18 @@ import { noteItemPropTypes } from "./NoteItem";
 import { LocaleConsumer } from "../Contexts/LocaleContext";
 
 function NoteList({ notes }) {
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        setLoading(false);
+    }, []);
+
     return (
         <LocaleConsumer>
             {({ locale }) => {
                 return (
                     <>
-                        {(notes.length) ? (
+                        {loading ? (<p>{locale === "id" ? "Memuat Catatan..." : "Fetching Notes..."}</p>) : ((notes.length) ? (
                             <section className="notes-list">
                                 {notes.map((note) =>
                                     <NoteItem
@@ -22,7 +28,7 @@ function NoteList({ notes }) {
                             <section className="notes-list-empty">
                                 <p>{locale === "id" ? "Tidak ada catatan" : "No notes"}</p>
                             </section>
-                        )}
+                        ))}
                     </>
                 )
             }}

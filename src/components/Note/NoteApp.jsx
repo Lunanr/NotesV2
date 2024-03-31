@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
-import HomePageWrapper from "../../pages/HomePage";
-import ArchivePageWrapper from "../../pages/ArchivesPage";
-import DetailPageWrapper from "../../pages/DetailPage"
+import HomePage from "../../pages/HomePage";
+import ArchivesPage from "../../pages/ArchivesPage";
+import DetailPage from "../../pages/DetailPage"
 import AddPage from "../../pages/AddPage";
 import RegisterPage from "../../pages/RegisterPage";
 import LoginPage from "../../pages/LoginPage";
@@ -15,135 +15,94 @@ import LogoutButton from "../Button/LogoutButton";
 import ThemeButton from "../Button/ThemeButton";
 import TranslateButton from "../Button/TranslateButton";
 
-class NoteApp extends React.Component {
-    constructor(props) {
-        super(props);
+function NoteApp() {
+    const [authedUser, setAuthedUser] = React.useState(null);
+    const [initializing, setInitializing] = React.useState(true);
+    const [theme, setTheme] = React.useState(localStorage.getItem("theme") || "dark");
+    const [locale, setLocale] = React.useState(localStorage.getItem("locale") || "id");
 
-        this.state = {
-            authedUser: null,
-            initializing: true, //Ketika true digunakan ketika komponen akan merender konten yang ditandai dengan loading
-            theme: localStorage.getItem('theme') || "dark",
-            toggleTheme: () => {
-                this.setState((prevState) => {
-                    const newTheme = prevState.theme === "dark" ? "light" : "dark";
-                    localStorage.setItem('theme', newTheme);
+    const toggleTheme = () => {
+        const newTheme = theme === "dark" ? "light" : "dark";
+        localStorage.setItem("theme", newTheme);
+        setTheme(newTheme);
+    };
 
-                    return {
-                        theme: newTheme
-                    };
-                });
-            },
-            localeContext: {
-                locale: "id",
-                toggleLocale: () => {
-                    this.setState((prevState) => {
-                        return {
-                            localeContext: {
-                                ...prevState.localeContext,
-                                locale: prevState.localeContext.locale === "id" ? "en" : "id"
-                            }
-                        }
-                    })
-                }
-            }
-        };
+    const toggleLocale = () => {
+        const newLocale = locale === "id" ? "en" : "id";
+        localStorage.setItem("locale", newLocale);
+        setLocale(newLocale);
+    };
 
-        this.onLoginSuccess = this.onLoginSuccess.bind(this);
-        this.onLogout = this.onLogout.bind(this);
-    }
-
-    // Digunakan untuk login
-    async onLoginSuccess({ accessToken }) {
+    const onLoginSuccess = async ({ accessToken }) => {
         putAccessToken(accessToken);
         const { data } = await getUserLogged();
-
-        this.setState(() => {
-            return {
-                authedUser: data,
-            };
-        });
+        setAuthedUser(data);
     }
 
-    // Digunakan untuk mendapatkan data pengguna yang sedang login
-    async componentDidMount() {
-        const { data } = await getUserLogged();
-        document.documentElement.setAttribute('data-theme', this.state.theme);
+    const onLogout = () => {
+        setAuthedUser(null);
+        putAccessToken("");
+    };
 
-        this.setState(() => {
-            return {
-                authedUser: data,
-                initializing: false,
-            };
-        });
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.theme !== this.state.theme) {
-            document.documentElement.setAttribute('data-theme', this.state.theme);
+    React.useEffect(() => {
+        const fetchData = async () => {
+            const { data } = await getUserLogged();
+            setAuthedUser(data);
+            setInitializing(false);
         };
+
+        fetchData();
+    }, []);
+
+    if (initializing) {
+        return null;
     }
 
-    onLogout() {
-        this.setState(() => {
-            return {
-                authedUser: null
-            };
-        });
-
-        putAccessToken('');
-    }
-
-    render() {
-        if (this.state.initializing) {
-            return null;
-        }
-
-        if (this.state.authedUser === null) {
-            return (
-                <LocaleProvider value={this.state.localeContext}>
-                    <ThemeProvider value={this.state}>
-                        <div className="app-container">
-                            <header>
-                                <h1><Link to="/">{this.state.localeContext.locale === "id" ? "Aplikasi Catatan" : "Notes App"}</Link></h1>
-                                <TranslateButton />
-                                <ThemeButton />
-                            </header>
-                            <main>
-                                <Routes>
-                                    <Route path="/*" element={<LoginPage loginSuccess={this.onLoginSuccess} />} />
-                                    <Route path="/register" element={<RegisterPage />} />
-                                </Routes>
-                            </main>
-                        </div>
-                    </ThemeProvider>
-                </LocaleProvider>
-            )
-        }
-
+    if (authedUser === null) {
         return (
-            <LocaleProvider value={this.state.localeContext}>
-                <ThemeProvider value={this.state}>
-                    <div className="app-container">
+            <LocaleProvider value={{ locale, toggleLocale }}>
+                <ThemeProvider value={{ theme, toggleTheme }}>
+                    <div className="app-container" data-theme={theme}>
                         <header>
-                            <h1><Link to="/">{this.state.localeContext.locale === "id" ? "Aplikasi Catatan" : "Notes App"}</Link></h1>
-                            <Navigation />
+                            <h1><Link to="/">{locale === "id" ? "Aplikasi Catatan" : "Note App"}</Link></h1>
                             <TranslateButton />
                             <ThemeButton />
-                            <LogoutButton logout={this.onLogout} name={this.state.authedUser.name} />
                         </header>
                         <main>
                             <Routes>
-                                <Route path="/" element={<HomePageWrapper />} />
-                                <Route path="/archives" element={<ArchivePageWrapper />} />
-                                <Route path="/notes/:id" element={<DetailPageWrapper />} />
-                                <Route path="/add" element={<AddPage />} />
+                                <Route path="/" element={<LoginPage loginSuccess={onLoginSuccess} />}></Route>
+                                <Route path="/register" element={<RegisterPage />}></Route>
                             </Routes>
                         </main>
                     </div>
                 </ThemeProvider>
             </LocaleProvider>
-        );
+        )
     }
+
+    return (
+        <LocaleProvider value={{ locale, toggleLocale }}>
+            <ThemeProvider value={{ theme, toggleTheme }}>
+                <div className="app-container" data-theme={theme}>
+                    <header>
+                        <h1><Link to="/">{locale === "id" ? "Aplikasi Catatan" : "Note App"}</Link></h1>
+                        <Navigation />
+                        <TranslateButton />
+                        <ThemeButton />
+                        <LogoutButton logout={onLogout} name={authedUser.name} />
+                    </header>
+                    <main>
+                        <Routes>
+                            <Route path="/" element={<HomePage />}></Route>
+                            <Route path="/archives" element={<ArchivesPage />}></Route>
+                            <Route path="/notes/:id" element={<DetailPage />}></Route>
+                            <Route path="/add" element={<AddPage />}></Route>
+                        </Routes>
+                    </main>
+                </div>
+            </ThemeProvider>
+        </LocaleProvider>
+    )
 }
 
 export default NoteApp;

@@ -6,7 +6,12 @@ function ThemeButton() {
     return (
         <ThemeConsumer>
             {({ theme, toggleTheme }) => (
-                <button className="toggle-theme" type="button" onClick={toggleTheme}>{theme === "dark" ? <FaSun /> : <FaMoon />}</button>
+                <button
+                    className="toggle-theme"
+                    type="button"
+                    onClick={toggleTheme}>
+                    {theme === "dark" ? <FaSun /> : <FaMoon />}
+                </button>
             )}
         </ThemeConsumer>
     )
