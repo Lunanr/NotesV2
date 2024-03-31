@@ -3,11 +3,10 @@ import { useParams } from "react-router-dom";
 import { getNote } from "../utils/network-data";
 import NoteDetail from "../components/Note/NoteDetail";
 import NotFoundPage from "./NotFoundPage";
-import { useState } from "react";
 
 function DetailPage() {
     const { id } = useParams();
-    const [notes, setNotes] = useState([]);
+    const [notes, setNotes] = React.useState({});
 
     React.useEffect(() => {
         getNote(id).then(({ data }) => {
@@ -15,12 +14,14 @@ function DetailPage() {
         });
     }, []);
 
+    console.log(notes);
+
     if (!notes) {
         return <NotFoundPage />;
     }
 
     return (
-        <NoteDetail note={notes} />
+        <NoteDetail title={notes.title} createdAt={notes.createdAt} body={notes.body} />
     )
 }
 

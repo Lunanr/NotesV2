@@ -1,86 +1,61 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-class RegisterInput extends React.Component {
-    constructor(props) {
-        super(props)
+function RegisterInput({ register }) {
+    const [name, setName] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [confirmPassword, setConfirmPassword] = React.useState("");
 
-        this.state = {
-            name: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-        }
+    const onNameChangeHandler = (event) => {
+        setName(event.target.value);
+    };
+    const onEmailChangeHandler = (event) => {
+        setEmail(event.target.value);
+    };
+    const onPasswordChangeHandler = (event) => {
+        setPassword(event.target.value);
+    };
+    const onConfirmPasswordChangeHandler = (event) => {
+        setConfirmPassword(event.target.value);
+    };
 
-        this.onNameChange = this.onNameChange.bind(this);
-        this.onEmailChange = this.onEmailChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.onConfirmPasswordChange = this.onConfirmPasswordChange.bind(this);
-        this.onSubmitHandler = this.onSubmitHandler.bind(this);
-    }
-
-    onNameChange(event) {
-        this.setState(() => {
-            return {
-                name: event.target.value,
-            };
-        });
-    }
-
-    onEmailChange(event) {
-        this.setState(() => {
-            return {
-                email: event.target.value,
-            };
-        });
-    }
-
-    onPasswordChange(event) {
-        this.setState(() => {
-            return {
-                password: event.target.value,
-            };
-        });
-    }
-
-    onConfirmPasswordChange(event) {
-        this.setState(() => {
-            return {
-                confirmPassword: event.target.value,
-            };
-        });
-    }
-
-    onSubmitHandler(event) {
+    const onSubmitEventHandler = (event) => {
         event.preventDefault();
-        const { password, confirmPassword } = this.state;
+
         if (password !== confirmPassword) {
             window.alert("Password and Confirm Password must be the same");
-            return; //Digunakan untuk menghentikan eksekusi fungsi onSubmitHandler
+            return;
         }
 
-        this.props.register({
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password,
+        register({
+            name: name,
+            email: email,
+            password,
         });
-    }
 
-    render() {
-        return (
-            <div className="input-register">
-                <label htmlFor="name">Name</label>
-                <input type="text" id="name" value={this.state.name} onChange={this.onNameChange} />
-                <label htmlFor="email">Email</label>
-                <input type="email" id="email" value={this.state.email} onChange={this.onEmailChange} />
-                <label htmlFor="password">Password</label>
-                <input type="password" id="password" value={this.state.password} onChange={this.onPasswordChange} />
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" value={this.state.confirmPassword} onChange={this.onConfirmPasswordChange} />
-                <button type="submit" onClick={this.onSubmitHandler}>Register</button>
-            </div>
-        )
-    }
+        setName("");
+        setEmail("");
+        setPassword("");
+    };
+
+    return (
+        <div className="input-register">
+            <label htmlFor="name">Name</label>
+            <input type="text" id="name" value={name} onChange={onNameChangeHandler} />
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" value={email} onChange={onEmailChangeHandler} />
+            <label htmlFor="password">Password</label>
+            <input type="password" id="password" value={password} onChange={onPasswordChangeHandler} />
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" value={confirmPassword} onChange={onConfirmPasswordChangeHandler} />
+            <button type="submit" onClick={onSubmitEventHandler}>Register</button>
+        </div>
+    )
+}
+
+RegisterInput.propTypes = {
+    register: PropTypes.func.isRequired,
 }
 
 export default RegisterInput;
